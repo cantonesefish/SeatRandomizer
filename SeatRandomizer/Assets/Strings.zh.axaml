@@ -1,0 +1,16 @@
+<!-- Assets/Strings.zh.axaml -->
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+	<sys:String x:Key="AppName">座位宝</sys:String>
+	<sys:String x:Key="LoadData">重载数据</sys:String>
+	<sys:String x:Key="Rearrange">排列座位</sys:String>
+	<sys:String x:Key="Male">男</sys:String>
+	<sys:String x:Key="Female">女</sys:String>
+	<sys:String x:Key="Other">其他</sys:String>
+	<sys:String x:Key="EditConfig">编辑配置</sys:String>
+	<sys:String x:Key="EditPeople">编辑人员</sys:String>
+	<sys:String x:Key="Podium">讲台</sys:String>
+	<sys:String x:Key="ExportLayout">导出布局</sys:String>
+	<sys:String x:Key="Same-gender">相同性别同桌</sys:String>
+</ResourceDictionary>

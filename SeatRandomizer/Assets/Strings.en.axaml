@@ -1,0 +1,16 @@
+<!-- Assets/Strings.en.axaml -->
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+	<sys:String x:Key="AppName">Seat Randomizer</sys:String>
+	<sys:String x:Key="LoadData">Reload Data</sys:String>
+	<sys:String x:Key="Rearrange">Arrange</sys:String>
+	<sys:String x:Key="Male">Male</sys:String>
+	<sys:String x:Key="Female">Female</sys:String>
+	<sys:String x:Key="Other">Other</sys:String>
+	<sys:String x:Key="EditConfig">Edit Config</sys:String>
+	<sys:String x:Key="EditPeople">Edit People</sys:String>
+	<sys:String x:Key="Podium">Podium</sys:String>
+	<sys:String x:Key="ExportLayout">Export Layout</sys:String>
+	<sys:String x:Key="Same-gender">Same-gender deskmate</sys:String>
+</ResourceDictionary>

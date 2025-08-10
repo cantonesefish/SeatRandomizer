@@ -1,0 +1,50 @@
+<!-- Views/MainWindow.axaml -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SeatRandomizer.ViewModels"
+        x:Class="SeatRandomizer.Views.MainWindow"
+        Icon="/Assets/App-Icon.ico"
+        Title="{Binding Title}"
+        x:DataType="vm:MainWindowViewModel">
+	<Design.DataContext>
+		<vm:MainWindowViewModel />
+	</Design.DataContext>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="10" HorizontalAlignment="Left">
+			<Button Name="RearrangeButton" Content="{DynamicResource Rearrange}" Click="RearrangeButton_Click"/>
+			<Button Name="ExportButton" Content="{DynamicResource ExportLayout}" Click="ExportButton_Click"/>
+			<Button Name="EditConfigButton" Content="{DynamicResource EditConfig}" Click="EditConfigButton_Click"/>
+			<Button Name="EditPeopleButton" Content="{DynamicResource EditPeople}" Click="EditPeopleButton_Click"/>
+			<CheckBox Name="SameSexAdjacentCheckBox"
+                      Content="{DynamicResource Same-gender}"
+                      IsChecked="{Binding IsSameSexAdjacentPreference}"
+                      VerticalAlignment="Center"/>
+		</StackPanel>
+
+		<ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="10">
+			<Grid Name="SeatGrid" Background="Transparent" />
+		</ScrollViewer>
+
+		<Border Grid.Row="2"
+                Background="LightBlue"
+                BorderBrush="DarkBlue"
+                BorderThickness="2"
+                CornerRadius="10"
+                Margin="20,10,20,20"
+                Padding="10">
+			<TextBlock Text="{DynamicResource Podium}"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+		</Border>
+
+	</Grid>
+</Window>
