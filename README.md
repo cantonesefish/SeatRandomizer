@@ -99,10 +99,10 @@ The student list uses CSV format, named `student.csv` (if not specified otherwis
 
 ```
 Number,Name,Sex
-1,Zhang San,Male
-2,Li Si,Female
-3,Wang Wu,Male
-4,Zhao Liu,Female
+1,Zhang San,male
+2,Li Si,female
+3,Wang Wu,male
+4,Zhao Liu,female
 ```
 
 - Must contain three columns: Number, Name, Sex (ID, Name, Gender)
