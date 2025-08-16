@@ -106,10 +106,10 @@ aisles:
 
 ```csv
 Number,Name,Sex
-1,张三,Male
-2,李四,Female
-3,王五,Male
-4,赵六,Female
+1,张三,male
+2,李四,female
+3,王五,male
+4,赵六,female
 ```
 
 - 必须包含三列：Number,Name,Sex（即编号、姓名、性别）
