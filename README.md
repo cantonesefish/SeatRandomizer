@@ -106,7 +106,7 @@ Number,Name,Sex
 ```
 
 - Must contain three columns: Number, Name, Sex (ID, Name, Gender)
-- When gender is "Male" or "Female", the seat border will be colored accordingly, but this does not affect the "same-gender seat pairing" functionality.
+- When gender is "male" or "female", the seat border will be colored accordingly, but this does not affect the "same-gender seat pairing" functionality.
 
 - The program automatically generates a CSV file containing 8 example students on first run.
 
