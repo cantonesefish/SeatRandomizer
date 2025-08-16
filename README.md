@@ -19,7 +19,7 @@ A cross-platform desktop application for random seat arrangement, especially sui
 - Automatically generates configuration files and student list templates on first run.
 - Excellent i18n support, automatically switches based on system language.
 
-##🛠 Usage Instructions
+## 🛠 Usage Instructions
 
 ### First Run
 When running the program for the first time, it will automatically create the following files:

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Avalonia.Threading;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Platform;
 
 namespace SeatRandomizer.Views;
 
@@ -37,6 +38,22 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        try
+        {
+            if (System.IO.File.Exists("Assets/App-Icon.png"))
+            {
+                using var iconStream = System.IO.File.OpenRead("Assets/App-Icon.png");
+                this.Icon = new WindowIcon(iconStream);
+            }
+            else
+            {
+                System.Console.WriteLine("Icon.png not found for window icon.");
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Console.WriteLine($"Failed to set window icon: {ex.Message}");
+        }
         this.DataContextChanged += OnDataContextChanged;
     }
 
@@ -78,7 +95,6 @@ public partial class MainWindow : Window
         }
     }
 
-    // --- 修改：更新导出按钮点击事件 ---
     private async void ExportButton_Click(object sender, RoutedEventArgs e)
     {
         System.Console.WriteLine("View: Export button clicked.");
@@ -87,28 +103,22 @@ public partial class MainWindow : Window
             await vm.ExportToExcel(this); // 传递 this 作为 parent window
         }
     }
-    // --- 修改结束 ---
 
-    // --- 修改：更新编辑按钮点击事件 ---
     private async void EditConfigButton_Click(object sender, RoutedEventArgs e) =>
         await EditFileWithConfirmationAsync("config.yaml");
 
     private async void EditPeopleButton_Click(object sender, RoutedEventArgs e) =>
         await EditFileWithConfirmationAsync("people.csv");
-    // --- 修改结束 ---
 
-    // --- 修改：使用自定义 MessageBox ---
     private async Task EditFileWithConfirmationAsync(string fileName)
     {
         System.Console.WriteLine($"View: Request to edit '{fileName}'.");
 
-        // 获取本地化字符串 (简化处理，实际应用中可从资源获取)
         string title = "确认";
         string message = $"您即将编辑 '{fileName}' 文件。修改完成后，请重启应用程序以使更改生效。是否继续？";
         string yesText = "确认";
         string noText = "取消";
 
-        // 显示自定义消息框
         bool result = await MessageBoxWindow.ShowAsync(this, title, message, yesText, noText);
 
         if (result)
@@ -121,7 +131,6 @@ public partial class MainWindow : Window
             System.Console.WriteLine("View: User cancelled editing.");
         }
     }
-    // --- 修改结束 ---
 
     private async Task OpenFileInDefaultEditor(string fileName)
     {

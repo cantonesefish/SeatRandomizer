@@ -8,7 +8,7 @@ namespace SeatRandomizer.Views;
 
 public partial class MessageBoxWindow : Window
 {
-    private TaskCompletionSource<bool> _tcs = new TaskCompletionSource<bool>();
+    private TaskCompletionSource<bool> _tcs = new();
 
     public MessageBoxWindow()
     {

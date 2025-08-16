@@ -9,10 +9,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
 using ClosedXML.Excel;
-// --- 新增：Avalonia 对话框引用 ---
 using Avalonia.Platform.Storage;
 using Avalonia.Controls;
-// --- 新增结束 ---
+
 
 namespace SeatRandomizer.ViewModels;
 
@@ -23,7 +22,7 @@ public class MainWindowViewModel : ViewModelBase
     private readonly ILocalizationService? _localizationService;
     private string _title = "Seat Randomizer";
     private AppConfig _currentConfig = new();
-    private List<Person> _loadedPeople = new();
+    private List<Person> _loadedPeople = [];
     private bool _isSameSexAdjacentPreference = false;
 
     public bool IsSameSexAdjacentPreference
@@ -42,7 +41,7 @@ public class MainWindowViewModel : ViewModelBase
     public int Columns => _currentConfig.Columns;
     public AppConfig CurrentConfig => _currentConfig;
 
-    public ObservableCollection<SeatViewModel> Seats { get; } = new();
+    public ObservableCollection<SeatViewModel> Seats { get; } = [];
 
     // 枚举定义在类内部是好的
     private enum CellType
@@ -132,7 +131,7 @@ public class MainWindowViewModel : ViewModelBase
         }
 
         // 4. 确定行过道在 Grid 中的位置
-        List<int> gridAisleRowIndices = new List<int>();
+        List<int> gridAisleRowIndices = [];
         var sortedRowAisles = config.AisleRows.OrderBy(a => a.Start).ToList();
         int rowOffset = 0;
         for (int i = 0; i < sortedRowAisles.Count; i++)
@@ -148,7 +147,7 @@ public class MainWindowViewModel : ViewModelBase
         System.Console.WriteLine($"VM: Grid Row Aisles will be at indices: {string.Join(", ", gridAisleRowIndices)}");
 
         // 5. 确定列过道在 Grid 中的位置
-        List<int> gridAisleColIndices = new List<int>();
+        List<int> gridAisleColIndices = [];
         var sortedColAisles = config.AisleColumns.OrderBy(a => a.Start).ToList();
         int colOffset = 0;
         for (int i = 0; i < sortedColAisles.Count; i++)
@@ -287,7 +286,6 @@ public class MainWindowViewModel : ViewModelBase
         System.Console.WriteLine($"VM: RearrangeSeats finished. Updated {updateCount} seat view models.");
     }
 
-    // --- 修改：更新 ExportToExcel 方法 ---
     public async Task ExportToExcel(Window parentWindow)
     {
         System.Console.WriteLine("VM: ExportToExcel started.");
@@ -305,13 +303,13 @@ public class MainWindowViewModel : ViewModelBase
             {
                 Title = "导出座位布局到...",
                 DefaultExtension = "xlsx",
-                FileTypeChoices = new FilePickerFileType[]
-                {
-                    new FilePickerFileType("Excel 文件")
+                FileTypeChoices =
+                [
+                    new("Excel 文件")
                     {
-                        Patterns = new[] { "*.xlsx" }
+                        Patterns = ["*.xlsx"]
                     }
-                },
+                ],
                 SuggestedFileName = $"座位布局_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"
             };
 
@@ -340,7 +338,6 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    // --- 新增：执行实际导出逻辑的方法 ---
     private async Task DoExportToPath(string filePath)
     {
         try
@@ -414,13 +411,10 @@ public class MainWindowViewModel : ViewModelBase
             }
 
             System.Console.WriteLine($"VM: File saved to {filePath}");
-            // 可选：通知用户成功，例如通过一个 Action 回调或事件
         }
         catch (Exception ex)
         {
             System.Console.WriteLine($"VM: Error saving file: {ex}");
-            // 可选：通知用户失败
         }
     }
-    // --- 新增结束 ---
 }
