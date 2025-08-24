@@ -119,6 +119,12 @@ Number,Name,Sex
 
 The exported XLSX spreadsheet contains the podium and all seats, which can be used for editing, printing, or sharing.
 
+## Video playback
+
+When the “Play video when arranging seats” checkbox is selected, clicking “Arrange seats” will automatically play the video.
+The video folder is located in the video folder under the program's runtime directory. Click the “Open video folder” button to go there directly.
+Videos must be in mp4 format. Linux users may need to install `libvlc` to use this feature.
+
 ## 🌐 Technical Details
 - Development Environment: Visual Studio 2022
 - Development Language: C# .NET 8.0
