@@ -18,6 +18,7 @@ A cross-platform desktop application for random seat arrangement, especially sui
 - Supports exporting current seat layout to spreadsheet files.
 - Automatically generates configuration files and student list templates on first run.
 - Excellent i18n support, automatically switches based on system language.
+- Support playing videos during seating arrangement to make it more ceremonial.
 
 ## 🛠 Usage Instructions
 
@@ -128,6 +129,9 @@ The exported XLSX spreadsheet contains the podium and all seats, which can be us
   - ClosedXML 0.105.0 (for XLSX table export)
   - Avalonia 11.3.0 (UI implementation)
   - MessageBox.Avalonia 3.2.0 (interface prompts)
+  - LibVLCSharp 3.9.4 (Video playback library)
+  - LibVLCSharp.Avalonia 3.9.4 (Avalonia integration of video playback library)
+  - VideoLAN.LibVLC.Windows (Windows specific video playback library)
 
 ## 📄 License
 

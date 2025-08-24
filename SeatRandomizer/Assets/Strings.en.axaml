@@ -13,4 +13,6 @@
 	<sys:String x:Key="Podium">Podium</sys:String>
 	<sys:String x:Key="ExportLayout">Export Layout</sys:String>
 	<sys:String x:Key="Same-gender">Same-gender deskmate</sys:String>
+	<sys:String x:Key="OpenVideoFolder">Open Video Folder</sys:String>
+	<sys:String x:Key="PlayVideoOnRearrange">Play Video on Rearrange</sys:String>
 </ResourceDictionary>

@@ -18,6 +18,7 @@
 - 支持导出当前座位布局为表格文件。
 - 首次运行自动生成配置文件和学生名单模板。
 - 良好的i18n支持，可根据系统语言自动切换。
+- 支持排座位时播放视频，让排座位更有仪式感。
 
 ## 🛠 使用说明
 
@@ -136,6 +137,9 @@ Number,Name,Sex
   - ClosedXML 0.105.0 (用于XLSX表格导出布局)
   - Avalonia 11.3.0 (UI 实现)
   - MessageBox.Avalonia 3.2.0 (界面提示)
+  - LibVLCSharp 3.9.4 (视频播放库)
+  - LibVLCSharp.Avalonia 3.9.4 (视频播放库的Avalonia集成)
+  - VideoLAN.LibVLC.Windows (Windows专用视频播放库)
 
 ## 📄 许可证
 

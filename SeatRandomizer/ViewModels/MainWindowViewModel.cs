@@ -7,11 +7,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.IO;
 using ClosedXML.Excel;
 using Avalonia.Platform.Storage;
 using Avalonia.Controls;
-
 
 namespace SeatRandomizer.ViewModels;
 
@@ -22,14 +20,16 @@ public class MainWindowViewModel : ViewModelBase
     private readonly ILocalizationService? _localizationService;
     private string _title = "Seat Randomizer";
     private AppConfig _currentConfig = new();
-    private List<Person> _loadedPeople = [];
+    private List<Person> _loadedPeople = new();
     private bool _isSameSexAdjacentPreference = false;
 
+    // --- 保留用户偏好 ---
     public bool IsSameSexAdjacentPreference
     {
         get => _isSameSexAdjacentPreference;
         set => this.RaiseAndSetIfChanged(ref _isSameSexAdjacentPreference, value);
     }
+    // --- 保留结束 ---
 
     public string Title
     {
@@ -41,14 +41,10 @@ public class MainWindowViewModel : ViewModelBase
     public int Columns => _currentConfig.Columns;
     public AppConfig CurrentConfig => _currentConfig;
 
-    public ObservableCollection<SeatViewModel> Seats { get; } = [];
+    public ObservableCollection<SeatViewModel> Seats { get; } = new();
 
-    // 枚举定义在类内部是好的
-    private enum CellType
-    {
-        Seat,
-        Aisle
-    }
+    // 枚举保留在类内部
+    private enum CellType { Seat, Aisle }
 
     // 设计时构造函数
     public MainWindowViewModel()
@@ -98,7 +94,6 @@ public class MainWindowViewModel : ViewModelBase
             CreateSeatsFromConfig();
         }
     }
-
     private void CreateSeatsFromConfig()
     {
         System.Console.WriteLine("VM: CreateSeatsFromConfig started.");
@@ -238,7 +233,7 @@ public class MainWindowViewModel : ViewModelBase
 
     public void RearrangeSeats()
     {
-        System.Console.WriteLine("VM: RearrangeSeats started.");
+        System.Console.WriteLine("VM: RearrangeSeats (data logic only) started.");
         if (_fileService == null || _seatArrangerService == null)
         {
             System.Console.WriteLine("VM: Services not initialized.");
@@ -251,18 +246,13 @@ public class MainWindowViewModel : ViewModelBase
             return;
         }
 
-        // --- 传递 IsSameSexAdjacentPreference 属性 ---
         var arrangedSeats = _seatArrangerService.ArrangeSeats(_loadedPeople, _currentConfig, _isSameSexAdjacentPreference);
-        System.Console.WriteLine($"VM: Service arranged {arrangedSeats.Count} seats.");
 
-        var arrangedSeatDict = new Dictionary<(int, int), Seat>();
-        foreach (var s in arrangedSeats.Where(seat => seat.IsEnabled))
-        {
-            arrangedSeatDict[(s.Row, s.Column)] = s;
-            System.Console.WriteLine($"  - Service has result for Logical({s.Row},{s.Column}): {s.Occupant?.Name ?? "Empty"}");
-        }
+        // 更新 Seats 集合中的 Occupant
+        var arrangedSeatDict = arrangedSeats
+            .Where(s => s.IsEnabled)
+            .ToDictionary(s => (s.Row, s.Column)); // 使用逻辑坐标
 
-        int updateCount = 0;
         foreach (var seatVm in Seats)
         {
             if (!seatVm.IsAisle && seatVm.IsEnabled)
@@ -270,28 +260,25 @@ public class MainWindowViewModel : ViewModelBase
                 if (arrangedSeatDict.TryGetValue((seatVm.LogicalRow, seatVm.LogicalColumn), out var arrangedSeat))
                 {
                     seatVm.Occupant = arrangedSeat.Occupant;
-                    updateCount++;
-                    System.Console.WriteLine($"VM: Updated Seat VM Grid({seatVm.Row},{seatVm.Column}) <- Person {arrangedSeat.Occupant?.Name ?? "None"}");
+                    System.Console.WriteLine($"VM: Updated Seat VM Logical({seatVm.LogicalRow},{seatVm.LogicalColumn}) <- Person {arrangedSeat.Occupant?.Name ?? "None"}");
                 }
                 else
                 {
                     seatVm.Occupant = null;
                 }
             }
-            else if (seatVm.IsAisle || !seatVm.IsEnabled)
+            else
             {
-                seatVm.Occupant = null;
+                seatVm.Occupant = null; // 过道或禁用座位
             }
         }
-        System.Console.WriteLine($"VM: RearrangeSeats finished. Updated {updateCount} seat view models.");
+        System.Console.WriteLine("VM: RearrangeSeats (data logic only) finished.");
     }
-
     public async Task ExportToExcel(Window parentWindow)
     {
         System.Console.WriteLine("VM: ExportToExcel started.");
         try
         {
-            // 1. 使用 SaveFileDialog 让用户选择路径
             var storageProvider = TopLevel.GetTopLevel(parentWindow)?.StorageProvider;
             if (storageProvider == null)
             {
@@ -303,13 +290,13 @@ public class MainWindowViewModel : ViewModelBase
             {
                 Title = "导出座位布局到...",
                 DefaultExtension = "xlsx",
-                FileTypeChoices =
-                [
-                    new("Excel 文件")
+                FileTypeChoices = new FilePickerFileType[]
+                {
+                    new FilePickerFileType("Excel 文件")
                     {
-                        Patterns = ["*.xlsx"]
+                        Patterns = new[] { "*.xlsx" }
                     }
-                ],
+                },
                 SuggestedFileName = $"座位布局_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"
             };
 
@@ -317,7 +304,7 @@ public class MainWindowViewModel : ViewModelBase
             if (file == null)
             {
                 System.Console.WriteLine("VM: User cancelled save dialog.");
-                return; // 用户取消
+                return;
             }
 
             var filePath = file.TryGetLocalPath();
@@ -327,10 +314,8 @@ public class MainWindowViewModel : ViewModelBase
                 return;
             }
 
-            // 2. 执行导出逻辑
             await DoExportToPath(filePath);
             System.Console.WriteLine("VM: ExportToExcel finished successfully.");
-
         }
         catch (Exception ex)
         {
@@ -349,12 +334,11 @@ public class MainWindowViewModel : ViewModelBase
                 int totalGridRows = _currentConfig.Rows + _currentConfig.AisleRows.Count;
                 int totalGridColumns = _currentConfig.Columns + _currentConfig.AisleColumns.Count;
 
-                // 填充座位数据
                 for (int r = 1; r <= totalGridRows; r++)
                 {
                     for (int c = 1; c <= totalGridColumns; c++)
                     {
-                        worksheet.Cell(r, c).Value = ""; // Default to aisle
+                        worksheet.Cell(r, c).Value = ""; 
                     }
                 }
 
@@ -365,7 +349,6 @@ public class MainWindowViewModel : ViewModelBase
 
                     if (seatVm.IsAisle)
                     {
-                        // Keep as "过道"
                     }
                     else if (seatVm.IsEnabled)
                     {
